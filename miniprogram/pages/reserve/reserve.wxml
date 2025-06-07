@@ -1,0 +1,112 @@
+<view class="container">
+  <view class="reserve-header">
+    <text class="page-title">预约洗衣机</text>
+  </view>
+
+  <!-- 预约表单 -->
+  <view class="reserve-form">
+    <view class="form-section">
+      <text class="form-title">选择预约时间</text>
+      
+      <view class="date-picker">
+        <picker 
+          mode="date" 
+          value="{{selectedDate}}" 
+          start="{{todayDate}}"
+          bindchange="onDateChange"
+        >
+          <view class="picker-item">
+            <text class="picker-label">日期：</text>
+            <text class="picker-value">{{selectedDate || '请选择'}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="time-picker">
+        <picker 
+          mode="time" 
+          value="{{selectedTime}}" 
+          bindchange="onTimeChange"
+        >
+          <view class="picker-item">
+            <text class="picker-label">时间：</text>
+            <text class="picker-value">{{selectedTime || '请选择'}}</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <button 
+      class="reserve-btn {{!canReserve ? 'disabled' : ''}}" 
+      bindtap="makeReservation"
+      disabled="{{!canReserve}}"
+    >
+      确认预约
+    </button>
+  </view>
+
+  <!-- 我的预约 -->
+  <view class="my-reservations">
+    <text class="section-title">我的预约</text>
+    
+    <view wx:if="{{myReservations.length === 0}}" class="empty-state">
+      <text class="empty-text">暂无预约记录</text>
+    </view>
+
+    <view wx:else class="reservation-list">
+      <view 
+        wx:for="{{myReservations}}" 
+        wx:key="id" 
+        class="reservation-item"
+      >
+        <view class="reservation-info">
+          <view class="reservation-time">
+            <text class="time-text">{{formatTime(item.reserved_time)}}</text>
+          </view>
+          <view class="reservation-status">
+            <text class="status-text {{item.status}}">{{getStatusText(item.status)}}</text>
+          </view>
+        </view>
+        
+        <view wx:if="{{item.status === 'active'}}" class="reservation-actions">
+          <button 
+            class="cancel-btn" 
+            bindtap="cancelReservation" 
+            data-id="{{item.id}}"
+          >
+            取消
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 所有预约 -->
+  <view class="all-reservations">
+    <text class="section-title">所有预约</text>
+    
+    <view wx:if="{{allReservations.length === 0}}" class="empty-state">
+      <text class="empty-text">暂无预约记录</text>
+    </view>
+
+    <view wx:else class="reservation-list">
+      <view 
+        wx:for="{{allReservations}}" 
+        wx:key="id" 
+        class="reservation-item"
+      >
+        <view class="reservation-info">
+          <view class="reservation-user">
+            <text class="user-text">{{item.user_name}}</text>
+          </view>
+          <view class="reservation-time">
+            <text class="time-text">{{formatTime(item.reserved_time)}}</text>
+          </view>
+          <view class="reservation-status">
+            <text class="status-text {{item.status}}">{{getStatusText(item.status)}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

@@ -1,0 +1,29 @@
+{
+  "name": "washing-machine-assistant",
+  "version": "1.0.0",
+  "description": "微信小程序：洗衣机状态管理小助手",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js",
+    "server": "node server/app.js"
+  },
+  "keywords": [
+    "微信小程序",
+    "洗衣机管理",
+    "状态管理"
+  ],
+  "author": "你的名字",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

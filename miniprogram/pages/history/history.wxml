@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="history-header">
+    <text class="page-title">使用历史</text>
+    <button class="refresh-btn" bindtap="refreshHistory">刷新</button>
+  </view>
+
+  <view wx:if="{{historyList.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无使用记录</text>
+  </view>
+
+  <view wx:else class="history-list">
+    <view 
+      wx:for="{{historyList}}" 
+      wx:key="id" 
+      class="history-item"
+    >
+      <view class="history-user">
+        <text class="user-name">{{item.user_name}}</text>
+        <text class="user-id">{{item.user_id}}</text>
+      </view>
+      
+      <view class="history-time">
+        <view class="time-row">
+          <text class="time-label">开始：</text>
+          <text class="time-value">{{formatTime(item.start_time)}}</text>
+        </view>
+        <view wx:if="{{item.end_time}}" class="time-row">
+          <text class="time-label">结束：</text>
+          <text class="time-value">{{formatTime(item.end_time)}}</text>
+        </view>
+        <view wx:else class="time-row">
+          <text class="time-label status-using">使用中...</text>
+        </view>
+      </view>
+      
+      <view class="history-duration">
+        <view wx:if="{{item.actual_duration}}" class="duration-info">
+          <text class="duration-label">实际用时：</text>
+          <text class="duration-value">{{item.actual_duration}}分钟</text>
+        </view>
+        <view wx:if="{{item.estimated_duration}}" class="duration-info">
+          <text class="duration-label">预计用时：</text>
+          <text class="duration-value">{{item.estimated_duration}}分钟</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

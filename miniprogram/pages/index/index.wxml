@@ -1,0 +1,90 @@
+<view class="container">
+  <!-- 洗衣机状态卡片 -->
+  <view class="status-card">
+    <view class="status-header">
+      <text class="status-title">洗衣机状态</text>
+      <text class="last-update">{{formatTime(status.updated_at)}}</text>
+    </view>
+    
+    <view class="status-content">
+      <view class="status-indicator {{status.status}}">
+        <text class="status-text">{{getStatusText(status.status)}}</text>
+      </view>
+      
+      <view wx:if="{{status.status === 'in_use'}}" class="usage-info">
+        <view class="user-info">
+          <text class="using-by">使用者：{{status.current_user_name}}</text>
+        </view>
+        <view class="time-info">
+          <text class="start-time">开始时间：{{formatTime(status.start_time)}}</text>
+          <text class="end-time">预计结束：{{formatTime(status.estimated_end_time)}}</text>
+        </view>
+        <view class="remaining-time">
+          <text>剩余时间：{{getRemainingTime(status.estimated_end_time)}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button 
+      wx:if="{{status.status === 'idle'}}" 
+      class="action-btn start-btn" 
+      bindtap="startUsing"
+    >
+      开始使用
+    </button>
+    
+    <button 
+      wx:if="{{status.status === 'in_use' && isCurrentUser}}" 
+      class="action-btn finish-btn" 
+      bindtap="finishUsing"
+    >
+      使用完成
+    </button>
+    
+    <button 
+      wx:if="{{status.status === 'in_use' && !isCurrentUser}}" 
+      class="action-btn disabled-btn" 
+      disabled
+    >
+      使用中...
+    </button>
+  </view>
+
+  <!-- 预约列表 -->
+  <view wx:if="{{reservations.length > 0}}" class="reservations">
+    <view class="section-title">📅 预约列表</view>
+    <view class="reservation-list">
+      <view 
+        wx:for="{{reservations}}" 
+        wx:key="id" 
+        class="reservation-item"
+      >
+        <view class="reservation-user">{{item.user_name}}</view>
+        <view class="reservation-time">{{formatTime(item.reserved_time)}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="section-title">⚡ 快捷操作</view>
+    <view class="quick-btn-group">
+      <button class="quick-btn" bindtap="goToHistory">查看历史</button>
+      <button class="quick-btn" bindtap="goToReserve">预约使用</button>
+      <button class="quick-btn" bindtap="refreshStatus">刷新状态</button>
+    </view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="tips">
+    <view class="tips-title">💡 使用提示</view>
+    <view class="tips-content">
+      <text>• 使用前请检查洗衣机内是否有遗留物品</text>
+      <text>• 使用完成后请及时标记，方便他人使用</text>
+      <text>• 建议预约功能避免使用冲突</text>
+    </view>
+  </view>
+</view> 
