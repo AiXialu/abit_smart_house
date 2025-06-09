@@ -21,7 +21,15 @@ class Database {
         estimated_end_time DATETIME,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
-    `);
+    `, (err) => {
+      if (err) {
+        console.error('创建洗衣机状态表失败:', err);
+        return;
+      }
+      
+      // 表创建成功后，检查是否需要初始化数据
+      this.initializeDefaultData();
+    });
 
     // 使用历史表
     this.db.run(`
@@ -48,8 +56,10 @@ class Database {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+  }
 
-    // 初始化洗衣机状态（如果不存在）
+  // 初始化默认数据
+  initializeDefaultData() {
     this.db.get("SELECT COUNT(*) as count FROM washing_machine_status", (err, row) => {
       if (err) {
         console.error('数据库查询错误:', err);
@@ -66,6 +76,8 @@ class Database {
             console.log('洗衣机状态初始化完成');
           }
         });
+      } else {
+        console.log('洗衣机状态表已存在数据，跳过初始化');
       }
     });
   }

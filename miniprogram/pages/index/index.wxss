@@ -1,16 +1,165 @@
 .container {
   padding: 20rpx;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
 }
 
-/* 状态卡片样式 */
-.status-card {
+/* 网络状态栏 */
+.network-status-bar {
+  background: white;
+  border-radius: 15rpx;
+  margin-bottom: 20rpx;
+  padding: 15rpx 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  border-left: 4rpx solid #2196F3;
+}
+
+.network-status-content {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.status-icon {
+  font-size: 24rpx;
+}
+
+.status-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.status-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 8rpx 16rpx;
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+.retry-btn:active {
+  transform: scale(0.98);
+}
+
+.diagnostic-btn {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 8rpx 16rpx;
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+.diagnostic-btn:active {
+  transform: scale(0.98);
+}
+
+/* 用户信息卡片样式 */
+.user-card {
   background: white;
   border-radius: 20rpx;
   padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  border: 2rpx solid #f0f0f0;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.user-status {
+  font-size: 24rpx;
+  color: #666;
+  background-color: #f8f9fa;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  display: inline-block;
+}
+
+.anonymous-user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.get-real-info-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(255, 152, 0, 0.3);
+  min-width: 200rpx;
+}
+
+.get-real-info-btn:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(255, 152, 0, 0.4);
+}
+
+.no-user-info {
+  text-align: center;
+  padding: 20rpx 0;
+}
+
+.hint-text {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.get-user-info-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 15rpx;
+  padding: 15rpx 30rpx;
+  font-size: 26rpx;
+  box-shadow: 0 4rpx 15rpx rgba(76, 175, 80, 0.3);
+}
+
+/* 主状态卡片样式 */
+.main-status-card {
+  background: white;
+  border-radius: 25rpx;
+  padding: 40rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.15);
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
 }
 
 .status-header {
@@ -21,211 +170,910 @@
 }
 
 .status-title {
-  font-size: 36rpx;
+  font-size: 40rpx;
   font-weight: bold;
   color: #333;
 }
 
-.last-update {
+.refresh-btn {
+  background: #f8f9fa;
+  border: none;
+  border-radius: 50%;
+  width: 60rpx;
+  height: 60rpx;
   font-size: 24rpx;
-  color: #999;
+  color: #666;
 }
 
-.status-content {
+.status-display {
   text-align: center;
 }
 
 /* 状态指示器 */
 .status-indicator {
   display: inline-block;
-  padding: 20rpx 40rpx;
+  padding: 25rpx 50rpx;
   border-radius: 50rpx;
   margin-bottom: 30rpx;
   font-weight: bold;
-  font-size: 32rpx;
+  font-size: 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .status-indicator.idle {
-  background-color: #e8f5e8;
-  color: #4CAF50;
+  background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+  color: #2e7d32;
 }
 
 .status-indicator.in_use {
-  background-color: #fff3e0;
-  color: #ff9800;
+  background: linear-gradient(135deg, #fff3e0, #ffcc02);
+  color: #f57c00;
 }
 
 .status-indicator.maintenance {
-  background-color: #ffebee;
-  color: #f44336;
+  background: linear-gradient(135deg, #ffebee, #ef5350);
+  color: #c62828;
 }
 
 /* 使用信息 */
-.usage-info {
+.current-usage {
   text-align: left;
-  background-color: #f8f9fa;
-  border-radius: 15rpx;
-  padding: 25rpx;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 20rpx;
+  padding: 30rpx;
   margin-top: 20rpx;
+  border: 1rpx solid #e9ecef;
 }
 
-.user-info {
-  margin-bottom: 15rpx;
+.usage-user {
+  margin-bottom: 20rpx;
 }
 
-.using-by {
-  font-size: 28rpx;
+.usage-user text {
+  font-size: 30rpx;
   color: #333;
   font-weight: bold;
 }
 
-.time-info {
+.usage-time {
   display: flex;
   flex-direction: column;
-  gap: 10rpx;
-  margin-bottom: 15rpx;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
 }
 
-.start-time, .end-time {
+.usage-time text {
   font-size: 26rpx;
   color: #666;
+  line-height: 1.4;
 }
 
 .remaining-time {
   text-align: center;
-  background-color: #fff3e0;
-  padding: 15rpx;
-  border-radius: 10rpx;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  padding: 20rpx;
+  border-radius: 15rpx;
+  border: 1rpx solid #ffcc02;
 }
 
 .remaining-time text {
-  font-size: 28rpx;
-  color: #ff9800;
+  font-size: 30rpx;
+  color: #f57c00;
   font-weight: bold;
 }
 
-/* 操作按钮样式 */
-.action-buttons {
+/* 主要操作按钮样式 */
+.main-actions {
   margin-bottom: 30rpx;
 }
 
-.action-btn {
+.primary-action-btn {
   width: 100%;
   padding: 25rpx;
-  border-radius: 15rpx;
-  font-size: 32rpx;
+  border-radius: 20rpx;
+  font-size: 36rpx;
   font-weight: bold;
   border: none;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 25rpx rgba(0, 0, 0, 0.15);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.notify-group-btn {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.test-btn {
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+  color: white;
+}
+
+.notify-group-btn:active,
+.test-btn:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.2);
+}
+
+.washing-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 20rpx;
+  border-radius: 15rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.1);
 }
 
 .start-btn {
-  background-color: #4CAF50;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
   color: white;
 }
 
 .finish-btn {
-  background-color: #2196F3;
+  background: linear-gradient(135deg, #2196F3, #1976D2);
   color: white;
 }
 
-.disabled-btn {
-  background-color: #e0e0e0;
-  color: #999;
+.waiting-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
 }
 
-/* 预约列表样式 */
-.reservations {
+/* 提醒卡片样式 */
+.reminder-card {
   background: white;
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+  border: 2rpx solid #e8f5e8;
+}
+
+.reminder-header {
+  margin-bottom: 20rpx;
+}
+
+.reminder-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.reminder-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reminder-desc {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+}
+
+.reminder-btn {
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  border: none;
+  margin-left: 20rpx;
+}
+
+.reminder-btn.enabled {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.reminder-btn.disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+/* 快速功能样式 */
+.quick-functions {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
 }
 
 .section-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20rpx;
+  margin-bottom: 25rpx;
 }
 
-.reservation-list {
+.quick-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.quick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25rpx 15rpx;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.quick-btn.group-setting-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.quick-btn.group-setting-btn .quick-btn-icon,
+.quick-btn.group-setting-btn .quick-btn-text {
+  color: white;
+}
+
+.quick-btn:active {
+  background-color: #e9ecef;
+  transform: scale(0.98);
+}
+
+.quick-btn.group-setting-btn:active {
+  background: linear-gradient(135deg, #45a049, #388e3c);
+}
+
+.quick-btn-icon {
+  font-size: 32rpx;
+  margin-bottom: 8rpx;
+}
+
+.quick-btn-text {
+  font-size: 22rpx;
+  color: #333;
+  text-align: center;
+}
+
+/* 简化预约列表样式 */
+.simple-reservations {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+}
+
+.reservation-preview {
   display: flex;
   flex-direction: column;
   gap: 15rpx;
 }
 
-.reservation-item {
+.reservation-item-simple {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20rpx;
-  background-color: #f8f9fa;
-  border-radius: 10rpx;
+  padding: 15rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #2196F3;
 }
 
 .reservation-user {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #333;
   font-weight: bold;
 }
 
 .reservation-time {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #666;
 }
 
-/* 快捷操作样式 */
-.quick-actions {
-  background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+.more-reservations {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  padding: 10rpx;
 }
 
-.quick-btn-group {
+/* 模态框样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  gap: 20rpx;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.quick-btn {
-  flex: 1;
-  padding: 20rpx;
-  background-color: #f8f9fa;
-  border: none;
-  border-radius: 10rpx;
-  font-size: 26rpx;
-  color: #333;
-}
-
-.quick-btn:active {
-  background-color: #e9ecef;
-}
-
-/* 使用提示样式 */
-.tips {
+.modal-content {
   background: white;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-radius: 25rpx;
+  margin: 40rpx;
+  max-width: 600rpx;
+  width: 90%;
+  max-height: 80%;
+  overflow: hidden;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.3);
 }
 
-.tips-title {
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+.modal-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 28rpx;
+  color: #666;
+  padding: 8rpx;
+  border-radius: 50%;
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.modal-tips {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border-radius: 15rpx;
+  padding: 20rpx;
+  margin-bottom: 25rpx;
+  border: 1rpx solid #ffcc02;
+}
+
+.tips-text {
+  font-size: 24rpx;
+  color: #f57c00;
+  line-height: 1.5;
+}
+
+.notify-option-btn {
+  width: 100%;
+  padding: 25rpx;
+  margin-bottom: 15rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 15rpx;
+  font-size: 28rpx;
+  color: #333;
+  text-align: left;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.notify-option-btn:active {
+  background: #e9ecef;
+  transform: scale(0.98);
+}
+
+.notify-option-btn:last-child {
+  margin-bottom: 0;
+}
+
+.share-option-btn {
+  background: linear-gradient(135deg, #1aad19, #2d8f47) !important;
+  color: white !important;
+  border: 2rpx solid #1aad19 !important;
+  box-shadow: 0 4rpx 16rpx rgba(26, 173, 25, 0.3) !important;
+}
+
+.share-option-btn:active {
+  background: linear-gradient(135deg, #179b16, #2d8f47) !important;
+}
+
+/* 群设置提示 */
+.group-setup-hint {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border-radius: 15rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border: 1rpx solid #ffcc02;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-setup-hint .hint-text {
+  font-size: 24rpx;
+  color: #f57c00;
+  flex: 1;
+}
+
+.setup-group-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 12rpx 20rpx;
+  font-size: 22rpx;
+  font-weight: bold;
+  margin-left: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(255, 152, 0, 0.3);
+}
+
+/* 群设置状态显示 */
+.group-status-display {
+  background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+  border-radius: 15rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border: 1rpx solid #4CAF50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-status-display .status-text {
+  font-size: 24rpx;
+  color: #2e7d32;
+  flex: 1;
+  font-weight: bold;
+}
+
+.change-group-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 12rpx 20rpx;
+  font-size: 22rpx;
+  font-weight: bold;
+  margin-left: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(76, 175, 80, 0.3);
+}
+
+/* @人员设置样式 */
+.at-setting-section {
+  background: #f8f9fa;
+  border-radius: 15rpx;
+  padding: 20rpx;
+  margin-bottom: 25rpx;
+  border: 1rpx solid #e9ecef;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.manage-members-btn {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 8rpx 16rpx;
+  font-size: 20rpx;
+}
+
+.at-mode-selector {
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 15rpx;
+}
+
+.at-mode-btn {
+  flex: 1;
+  padding: 12rpx 8rpx;
+  border: 2rpx solid #dee2e6;
+  border-radius: 10rpx;
+  background: white;
+  color: #666;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.at-mode-btn.active {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-color: #28a745;
+  font-weight: bold;
+}
+
+.common-members {
+  margin-top: 10rpx;
+}
+
+.members-label {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.members-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.member-tag {
+  background: linear-gradient(135deg, #6f42c1, #e83e8c);
+  color: white;
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+/* 小程序通知系统样式 */
+.notification-section,
+.traditional-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+}
+
+.notification-section {
+  border: 2rpx solid #4CAF50;
+}
+
+.traditional-section {
+  border: 2rpx solid #FF9800;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20rpx;
 }
 
-.tips-content {
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.subscription-btn {
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.subscription-btn.subscribed {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.subscription-btn.unsubscribed {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.notification-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 15rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.stats-item {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.unread-badge {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.notification-history-btn {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  border: none;
+}
+
+.in-app-notify-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+/* 群组信息样式 */
+.manage-group-btn {
+  background: linear-gradient(135deg, #6f42c1, #5a32a3);
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 8rpx 16rpx;
+  font-size: 20rpx;
+}
+
+.group-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 15rpx;
+  border: 1rpx solid #2196F3;
+}
+
+.group-details {
+  flex: 1;
+}
+
+.group-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #1976D2;
+  margin-bottom: 5rpx;
+}
+
+.group-stats {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.subscription-toggle {
+  margin-left: 15rpx;
+}
+
+.no-group-hint {
+  text-align: center;
+  padding: 30rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 15rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 成员选择器样式 */
+.member-selector-section {
+  background: #f0f8ff;
+  border-radius: 15rpx;
+  padding: 20rpx;
+  margin-bottom: 25rpx;
+  border: 1rpx solid #2196F3;
+}
+
+.selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.selector-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #1976D2;
+}
+
+.select-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.select-all-btn,
+.select-none-btn {
+  padding: 6rpx 12rpx;
+  border-radius: 10rpx;
+  font-size: 20rpx;
+  border: none;
+}
+
+.select-all-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.select-none-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.members-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 15rpx;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 16rpx;
+  background: white;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 20rpx;
+  min-width: 140rpx;
+  position: relative;
+}
+
+.member-item.selected {
+  background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+  border-color: #4CAF50;
+}
+
+.member-name {
+  font-size: 24rpx;
+  color: #333;
+  flex: 1;
+  margin-right: 8rpx;
+}
+
+.owner-badge {
+  font-size: 18rpx;
+  color: #ff9800;
+  background: #fff3e0;
+  padding: 2rpx 6rpx;
+  border-radius: 8rpx;
+  margin-right: 8rpx;
+}
+
+.selection-indicator {
+  font-size: 20rpx;
+}
+
+.selection-summary {
+  text-align: center;
+  padding: 10rpx;
+  background: #fff;
+  border-radius: 10rpx;
+}
+
+.summary-text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+/* 分享操作区域 */
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  margin-bottom: 20rpx;
+}
+
+.share-btn {
+  background: linear-gradient(135deg, #1aad19, #2d8f47);
+  border: none;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  color: white;
+  font-size: 28rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 16rpx rgba(26, 173, 25, 0.3);
+  transition: all 0.3s ease;
+}
+
+.share-btn:active {
+  background: linear-gradient(135deg, #179b16, #2d8f47);
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(26, 173, 25, 0.4);
+}
+
+.secondary-action-btn {
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 15rpx;
+  padding: 25rpx;
+  color: #666;
+  font-size: 26rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.secondary-action-btn:active {
+  background: #e9ecef;
+  transform: scale(0.98);
+}
+
+/* 分享功能指南 */
+.share-guide {
+  background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 30rpx;
+  border: 1rpx solid #c8e6c9;
+  box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.15);
+}
+
+.guide-header {
+  margin-bottom: 20rpx;
+}
+
+.guide-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.guide-content {
   display: flex;
   flex-direction: column;
   gap: 15rpx;
 }
 
-.tips-content text {
+.guide-item {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+}
+
+.guide-icon {
+  font-size: 24rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.guide-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #1b5e20;
+  line-height: 1.4;
+}
+
+/* 网络连接指南 */
+.network-guide {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  border-radius: 15rpx;
+  border: 1rpx solid #f44336;
+}
+
+.network-guide-header {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 15rpx;
+}
+
+.network-guide .guide-title {
+  color: #c62828;
   font-size: 26rpx;
-  color: #666;
-  line-height: 1.5;
-} 
+}
+
+.network-guide .guide-text {
+  color: #d32f2f;
+  font-size: 22rpx;
+}
+
+/* 快速功能 */ 

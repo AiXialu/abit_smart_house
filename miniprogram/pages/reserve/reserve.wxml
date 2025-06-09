@@ -1,111 +1,151 @@
 <view class="container">
-  <view class="reserve-header">
-    <text class="page-title">预约洗衣机</text>
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">📅 简单预约</text>
+    <text class="page-subtitle">快速预约，智能通知</text>
   </view>
 
-  <!-- 预约表单 -->
-  <view class="reserve-form">
-    <view class="form-section">
-      <text class="form-title">选择预约时间</text>
+  <!-- 当前状态概览 -->
+  <view class="status-overview">
+    <view class="overview-item">
+      <text class="overview-label">当前状态</text>
+      <text class="overview-value {{status.status}}">{{getStatusText(status.status)}}</text>
+    </view>
+    <view wx:if="{{status.status === 'in_use'}}" class="overview-item">
+      <text class="overview-label">预计完成</text>
+      <text class="overview-value">{{formatTime(status.estimated_end_time)}}</text>
+    </view>
+  </view>
+
+  <!-- 快速预约 -->
+  <view class="quick-reserve-card">
+    <view class="card-header">
+      <text class="card-title">⚡ 快速预约</text>
+    </view>
+    <view class="card-content">
+      <view class="reserve-time-selector">
+        <text class="selector-label">选择时间：</text>
+        <picker mode="time" value="{{selectedTime}}" bindchange="onTimeChange">
+          <view class="time-picker">
+            <text>{{selectedTime || '点击选择时间'}}</text>
+            <text class="picker-arrow">📅</text>
+          </view>
+        </picker>
+      </view>
       
-      <view class="date-picker">
-        <picker 
-          mode="date" 
-          value="{{selectedDate}}" 
-          start="{{todayDate}}"
-          bindchange="onDateChange"
-        >
-          <view class="picker-item">
-            <text class="picker-label">日期：</text>
-            <text class="picker-value">{{selectedDate || '请选择'}}</text>
-          </view>
-        </picker>
-      </view>
-
-      <view class="time-picker">
-        <picker 
-          mode="time" 
-          value="{{selectedTime}}" 
-          bindchange="onTimeChange"
-        >
-          <view class="picker-item">
-            <text class="picker-label">时间：</text>
-            <text class="picker-value">{{selectedTime || '请选择'}}</text>
-          </view>
-        </picker>
-      </view>
+      <button 
+        class="reserve-btn" 
+        bindtap="makeReservation"
+        disabled="{{!selectedTime}}"
+      >
+        🚀 预约并通知群
+      </button>
     </view>
-
-    <button 
-      class="reserve-btn {{!canReserve ? 'disabled' : ''}}" 
-      bindtap="makeReservation"
-      disabled="{{!canReserve}}"
-    >
-      确认预约
-    </button>
   </view>
 
-  <!-- 我的预约 -->
-  <view class="my-reservations">
-    <text class="section-title">我的预约</text>
-    
-    <view wx:if="{{myReservations.length === 0}}" class="empty-state">
-      <text class="empty-text">暂无预约记录</text>
+  <!-- 今日预约列表 -->
+  <view class="today-reservations">
+    <view class="section-header">
+      <text class="section-title">📋 今日预约 ({{reservations.length}}个)</text>
+      <button wx:if="{{reservations.length > 0}}" class="notify-all-btn" bindtap="notifyAllReservations">
+        📢 通知全部
+      </button>
     </view>
-
+    
+    <view wx:if="{{reservations.length === 0}}" class="empty-state">
+      <text class="empty-text">🌟 今天还没有预约</text>
+      <text class="empty-hint">使用上方快速预约功能添加预约</text>
+    </view>
+    
     <view wx:else class="reservation-list">
       <view 
-        wx:for="{{myReservations}}" 
+        wx:for="{{reservations}}" 
         wx:key="id" 
-        class="reservation-item"
+        class="reservation-item {{item.status}}"
       >
         <view class="reservation-info">
-          <view class="reservation-time">
-            <text class="time-text">{{formatTime(item.reserved_time)}}</text>
+          <view class="reservation-user">
+            <text class="user-name">{{item.user_name}}</text>
+            <text wx:if="{{item.is_current_user}}" class="current-user-tag">我的</text>
           </view>
-          <view class="reservation-status">
-            <text class="status-text {{item.status}}">{{getStatusText(item.status)}}</text>
+          <view class="reservation-time">
+            <text class="time-text">⏰ {{formatTime(item.reserved_time)}}</text>
+            <text class="status-text">{{getReservationStatusText(item.status)}}</text>
           </view>
         </view>
         
-        <view wx:if="{{item.status === 'active'}}" class="reservation-actions">
+        <view class="reservation-actions">
           <button 
-            class="cancel-btn" 
-            bindtap="cancelReservation" 
+            wx:if="{{item.is_current_user}}" 
+            class="action-btn cancel-btn" 
+            bindtap="cancelReservation"
             data-id="{{item.id}}"
           >
-            取消
+            ❌
+          </button>
+          <button 
+            class="action-btn notify-btn" 
+            bindtap="notifyReservation"
+            data-id="{{item.id}}"
+            data-user="{{item.user_name}}"
+            data-time="{{item.reserved_time}}"
+          >
+            📢
           </button>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 所有预约 -->
-  <view class="all-reservations">
-    <text class="section-title">所有预约</text>
-    
-    <view wx:if="{{allReservations.length === 0}}" class="empty-state">
-      <text class="empty-text">暂无预约记录</text>
+  <!-- 智能提醒设置 -->
+  <view class="smart-reminder-card">
+    <view class="card-header">
+      <text class="card-title">🤖 智能提醒</text>
     </view>
-
-    <view wx:else class="reservation-list">
-      <view 
-        wx:for="{{allReservations}}" 
-        wx:key="id" 
-        class="reservation-item"
-      >
-        <view class="reservation-info">
-          <view class="reservation-user">
-            <text class="user-text">{{item.user_name}}</text>
-          </view>
-          <view class="reservation-time">
-            <text class="time-text">{{formatTime(item.reserved_time)}}</text>
-          </view>
-          <view class="reservation-status">
-            <text class="status-text {{item.status}}">{{getStatusText(item.status)}}</text>
-          </view>
+    <view class="card-content">
+      <view class="reminder-option">
+        <view class="option-info">
+          <text class="option-title">预约前提醒</text>
+          <text class="option-desc">在预约时间前15分钟提醒</text>
         </view>
+        <switch 
+          checked="{{reminderSettings.beforeReminder}}" 
+          bindchange="toggleBeforeReminder"
+          color="#2196F3"
+        />
+      </view>
+      
+      <view class="reminder-option">
+        <view class="option-info">
+          <text class="option-title">自动群通知</text>
+          <text class="option-desc">预约成功后自动发送群通知</text>
+        </view>
+        <switch 
+          checked="{{reminderSettings.autoNotify}}" 
+          bindchange="toggleAutoNotify"
+          color="#2196F3"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 预约使用提示 -->
+  <view class="tips-card">
+    <view class="tips-header">
+      <text class="tips-title">💡 使用小贴士</text>
+    </view>
+    <view class="tips-content">
+      <view class="tip-item">
+        <text class="tip-icon">📢</text>
+        <text class="tip-text">预约后会自动生成群通知消息，点击复制发送</text>
+      </view>
+      <view class="tip-item">
+        <text class="tip-icon">⏰</text>
+        <text class="tip-text">建议在预约时间前5分钟到达洗衣房</text>
+      </view>
+      <view class="tip-item">
+        <text class="tip-icon">🤝</text>
+        <text class="tip-text">如有冲突，可以在群里协调时间</text>
       </view>
     </view>
   </view>

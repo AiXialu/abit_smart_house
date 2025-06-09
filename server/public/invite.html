@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洗衣机群组邀请</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .invite-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .invite-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .group-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .group-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .group-id {
+            color: #666;
+            font-family: monospace;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px dashed #ddd;
+            margin: 10px 0;
+        }
+        
+        .steps {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 480px) {
+            .invite-card {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invite-card">
+        <span class="icon">🧺</span>
+        <h1 class="title">洗衣机群组邀请</h1>
+        <p class="subtitle">您收到了一个群组邀请！加入我们一起管理洗衣机，避免白跑一趟～</p>
+        
+        <div class="group-info">
+            <div class="group-name" id="groupName">加载中...</div>
+            <div class="group-id">
+                群号：<span id="groupId">-</span>
+            </div>
+        </div>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>微信搜索"洗衣机助手"小程序</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>点击"加入群组"按钮</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>输入上方群号即可加入</div>
+            </div>
+        </div>
+        
+        <div class="qr-placeholder">
+            📱 小程序码<br>
+            <small>开发中...</small>
+        </div>
+        
+        <button class="btn" onclick="copyGroupId()">📋 复制群号</button>
+        <button class="btn btn-secondary" onclick="shareToWechat()">📤 分享给朋友</button>
+        
+        <div class="footer">
+            洗衣机助手 - 让共享洗衣更简单
+        </div>
+    </div>
+
+    <script>
+        // 从URL参数获取群组信息
+        const urlParams = new URLSearchParams(window.location.search);
+        const groupId = urlParams.get('groupId');
+        const groupName = decodeURIComponent(urlParams.get('groupName') || '洗衣机群');
+        const inviter = decodeURIComponent(urlParams.get('inviter') || '朋友');
+        
+        // 更新页面内容
+        document.getElementById('groupId').textContent = groupId || '未知';
+        document.getElementById('groupName').textContent = groupName;
+        document.title = `${inviter} 邀请您加入 ${groupName}`;
+        
+        // 复制群号功能
+        function copyGroupId() {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(groupId).then(() => {
+                    showToast('群号已复制到剪贴板！');
+                });
+            } else {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = groupId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('群号已复制！');
+            }
+        }
+        
+        // 分享功能
+        function shareToWechat() {
+            if (navigator.share) {
+                navigator.share({
+                    title: `${inviter} 邀请您加入 ${groupName}`,
+                    text: `加入洗衣机群组，一起管理洗衣机！群号：${groupId}`,
+                    url: window.location.href
+                });
+            } else {
+                // 降级到复制链接
+                copyGroupId();
+            }
+        }
+        
+        // 简单的Toast提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #333;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                z-index: 1000;
+                opacity: 0;
+                transition: opacity 0.3s;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.style.opacity = '1', 100);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2000);
+        }
+        
+        // 页面加载完成后的处理
+        window.addEventListener('DOMContentLoaded', () => {
+            // 如果没有群组ID，显示错误
+            if (!groupId) {
+                document.querySelector('.invite-card').innerHTML = `
+                    <span class="icon">❌</span>
+                    <h1 class="title">邀请链接无效</h1>
+                    <p class="subtitle">请检查邀请链接是否正确</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html> 

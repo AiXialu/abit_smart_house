@@ -1,0 +1,235 @@
+.container {
+  padding: 20rpx;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* 消息卡片样式 */
+.message-card {
+  background: white;
+  border-radius: 25rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.app-info {
+  display: flex;
+  align-items: center;
+}
+
+.app-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 15rpx;
+  margin-right: 20rpx;
+  background: white;
+  padding: 8rpx;
+}
+
+.app-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 4rpx;
+}
+
+.app-desc {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.time-stamp {
+  font-size: 22rpx;
+  opacity: 0.7;
+}
+
+/* 卡片内容 */
+.card-content {
+  padding: 40rpx 30rpx;
+}
+
+.message-content {
+  margin-bottom: 30rpx;
+}
+
+.message-text {
+  font-size: 36rpx;
+  line-height: 1.6;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 状态信息 */
+.status-info {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  border-left: 6rpx solid #2196F3;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.status-item:last-child {
+  margin-bottom: 0;
+}
+
+.status-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.status-value {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.status-value.idle {
+  color: #4CAF50;
+}
+
+.status-value.in_use {
+  color: #FF9800;
+}
+
+.status-value.maintenance {
+  color: #f44336;
+}
+
+/* 卡片操作按钮 */
+.card-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15rpx;
+  padding: 0 30rpx 30rpx;
+}
+
+.action-btn {
+  padding: 20rpx;
+  border-radius: 15rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.action-btn.secondary {
+  background: #f8f9fa;
+  color: #333;
+  border: 2rpx solid #e9ecef;
+}
+
+.action-btn.share-btn {
+  background: linear-gradient(135deg, #1aad19, #2d8f47);
+  color: white;
+}
+
+.action-btn.copy-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+}
+
+/* 快速操作 */
+.quick-actions {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25rpx;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25rpx 15rpx;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.quick-action-btn:active {
+  background-color: #e9ecef;
+  transform: scale(0.98);
+}
+
+.action-icon {
+  font-size: 32rpx;
+  margin-bottom: 8rpx;
+}
+
+.action-text {
+  font-size: 22rpx;
+  color: #333;
+  text-align: center;
+}
+
+/* 提示信息 */
+.tips {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.tip-item:last-child {
+  margin-bottom: 0;
+}
+
+.tip-icon {
+  font-size: 28rpx;
+  margin-right: 15rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.tip-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+} 

@@ -1,23 +1,58 @@
 <view class="container">
-  <!-- 洗衣机状态卡片 -->
-  <view class="status-card">
+  <!-- 网络状态指示器 -->
+  <view class="network-status-bar">
+    <view class="network-status-content">
+      <text class="status-icon">🌐</text>
+      <text class="status-text" wx:if="{{networkStatus === 'online'}}">在线模式</text>
+      <text class="status-text" wx:elif="{{networkStatus === 'offline'}}">离线模式</text>
+      <text class="status-text" wx:else>连接中...</text>
+      <view class="status-actions">
+        <button wx:if="{{networkStatus === 'offline'}}" class="retry-btn" bindtap="testNetworkConnection">重试</button>
+        <button class="diagnostic-btn" bindtap="runNetworkDiagnostic">诊断</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view wx:if="{{hasUserInfo}}" class="user-info">
+      <image wx:if="{{userInfo.avatarUrl}}" class="user-avatar" src="{{userInfo.avatarUrl}}"></image>
+      <view class="user-details">
+        <text class="user-name">{{userInfo.nickName}}</text>
+        <view wx:if="{{userInfo.isAnonymous || userInfo.isTemporary}}" class="anonymous-user-actions">
+          <text class="user-status" wx:if="{{userInfo.isDemoted}}">🔒 微信脱敏数据</text>
+          <text class="user-status" wx:elif="{{userInfo.isTemporary}}">👤 临时用户</text>
+          <text class="user-status" wx:else>❓ 匿名用户</text>
+          <button class="get-real-info-btn" bindtap="getUserInfo">🔐 重新获取微信信息</button>
+        </view>
+        <text wx:else class="user-status">✅ 真实微信用户</text>
+      </view>
+    </view>
+    <view wx:else class="no-user-info">
+      <text class="hint-text">获取用户信息以使用完整功能</text>
+      <button class="get-user-info-btn" bindtap="getUserInfo">获取用户信息</button>
+    </view>
+  </view>
+
+  <!-- 洗衣机状态大卡片 -->
+  <view class="main-status-card">
     <view class="status-header">
-      <text class="status-title">洗衣机状态</text>
-      <text class="last-update">{{formatTime(status.updated_at)}}</text>
+      <text class="status-title">🧺 洗衣机状态</text>
+      <button class="refresh-btn" bindtap="refreshStatus">🔄</button>
     </view>
     
-    <view class="status-content">
+    <view class="status-display">
       <view class="status-indicator {{status.status}}">
         <text class="status-text">{{getStatusText(status.status)}}</text>
       </view>
       
-      <view wx:if="{{status.status === 'in_use'}}" class="usage-info">
-        <view class="user-info">
-          <text class="using-by">使用者：{{status.current_user_name}}</text>
+      <view wx:if="{{status.status === 'in_use'}}" class="current-usage">
+        <view class="usage-user">
+          <text>🧑‍💼 使用者：{{status.current_user_name}}</text>
         </view>
-        <view class="time-info">
-          <text class="start-time">开始时间：{{formatTime(status.start_time)}}</text>
-          <text class="end-time">预计结束：{{formatTime(status.estimated_end_time)}}</text>
+        <view class="usage-time">
+          <text>⏰ 开始时间：{{formatTime(status.start_time)}}</text>
+          <text>⏳ 预计结束：{{formatTime(status.estimated_end_time)}}</text>
         </view>
         <view class="remaining-time">
           <text>剩余时间：{{getRemainingTime(status.estimated_end_time)}}</text>
@@ -26,65 +61,306 @@
     </view>
   </view>
 
-  <!-- 操作按钮 -->
-  <view class="action-buttons">
-    <button 
-      wx:if="{{status.status === 'idle'}}" 
-      class="action-btn start-btn" 
-      bindtap="startUsing"
-    >
-      开始使用
-    </button>
-    
-    <button 
-      wx:if="{{status.status === 'in_use' && isCurrentUser}}" 
-      class="action-btn finish-btn" 
-      bindtap="finishUsing"
-    >
-      使用完成
-    </button>
-    
-    <button 
-      wx:if="{{status.status === 'in_use' && !isCurrentUser}}" 
-      class="action-btn disabled-btn" 
-      disabled
-    >
-      使用中...
-    </button>
-  </view>
-
-  <!-- 预约列表 -->
-  <view wx:if="{{reservations.length > 0}}" class="reservations">
-    <view class="section-title">📅 预约列表</view>
-    <view class="reservation-list">
-      <view 
-        wx:for="{{reservations}}" 
-        wx:key="id" 
-        class="reservation-item"
+  <!-- 主要操作按钮区域 -->
+  <view class="main-actions">
+    <!-- 小程序通知功能 -->
+    <view class="notification-section">
+      <view class="section-header">
+        <text class="section-title">🏠 群组通知系统</text>
+        <button class="manage-group-btn" bindtap="manageGroup">
+          {{currentGroup ? '管理群组' : '创建/加入群组'}}
+        </button>
+      </view>
+      
+      <!-- 群组信息 -->
+      <view wx:if="{{currentGroup}}" class="group-info">
+        <view class="group-details">
+          <text class="group-name">{{currentGroup.name}}</text>
+          <text class="group-stats">{{groupMembers.length}}人 · 群号:{{currentGroup.id}}</text>
+        </view>
+        <view class="subscription-toggle">
+          <button 
+            class="subscription-btn {{isSubscribed ? 'subscribed' : 'unsubscribed'}}" 
+            bindtap="toggleSubscription"
+          >
+            {{isSubscribed ? '✅ 已订阅' : '❌ 未订阅'}}
+          </button>
+        </view>
+      </view>
+      
+      <!-- 无群组提示 -->
+      <view wx:else class="no-group-hint">
+        <text class="hint-text">🏠 创建或加入群组后，即可向群成员发送通知</text>
+      </view>
+      
+      <view wx:if="{{currentGroup}}" class="notification-stats">
+        <text class="stats-item">在线成员：{{onlineUsers.length}}/{{groupMembers.length}}人</text>
+        <button wx:if="{{unreadCount > 0}}" class="unread-badge" bindtap="showNotificationHistory">
+          {{unreadCount}}条未读
+        </button>
+        <button wx:else class="notification-history-btn" bindtap="showNotificationHistory">
+          通知历史
+        </button>
+      </view>
+      
+      <button 
+        wx:if="{{currentGroup && isSubscribed}}" 
+        class="primary-action-btn in-app-notify-btn" 
+        bindtap="showNotifyOptions"
+        data-mode="in-app"
       >
-        <view class="reservation-user">{{item.user_name}}</view>
-        <view class="reservation-time">{{formatTime(item.reserved_time)}}</view>
+        📱 发送群组通知
+      </button>
+    </view>
+
+    <!-- 传统群通知功能 -->
+    <view class="traditional-section">
+      <view class="section-header">
+        <text class="section-title">💬 传统群消息</text>
+      </view>
+      <view class="share-actions">
+        <button class="primary-action-btn share-btn" bindtap="quickShare">
+          📤 分享到微信群
+        </button>
+        <button class="secondary-action-btn notify-group-btn" bindtap="showNotifyOptions" data-mode="copy">
+          📋 复制群通知消息
+        </button>
+      </view>
+      <view class="group-setup-hint">
+        <text class="hint-text">💡 可以直接分享到微信群，或生成消息复制粘贴</text>
       </view>
     </view>
-  </view>
 
-  <!-- 快捷操作 -->
-  <view class="quick-actions">
-    <view class="section-title">⚡ 快捷操作</view>
-    <view class="quick-btn-group">
-      <button class="quick-btn" bindtap="goToHistory">查看历史</button>
-      <button class="quick-btn" bindtap="goToReserve">预约使用</button>
-      <button class="quick-btn" bindtap="refreshStatus">刷新状态</button>
+    <!-- 洗衣机操作按钮 -->
+    <view class="washing-actions">
+      <button 
+        wx:if="{{status.status === 'idle'}}" 
+        class="action-btn start-btn" 
+        bindtap="startUsing"
+      >
+        🚀 开始使用
+      </button>
+      
+      <button 
+        wx:if="{{status.status === 'in_use' && isCurrentUser}}" 
+        class="action-btn finish-btn" 
+        bindtap="finishUsing"
+      >
+        ✅ 使用完成
+      </button>
+      
+      <button 
+        wx:if="{{status.status === 'in_use' && !isCurrentUser}}" 
+        class="action-btn waiting-btn" 
+        bindtap="showWaitingOptions"
+      >
+        ⏰ 我也想用
+      </button>
     </view>
   </view>
 
-  <!-- 使用提示 -->
-  <view class="tips">
-    <view class="tips-title">💡 使用提示</view>
-    <view class="tips-content">
-      <text>• 使用前请检查洗衣机内是否有遗留物品</text>
-      <text>• 使用完成后请及时标记，方便他人使用</text>
-      <text>• 建议预约功能避免使用冲突</text>
+  <!-- 定时提醒设置 -->
+  <view wx:if="{{status.status === 'in_use' && isCurrentUser}}" class="reminder-card">
+    <view class="reminder-header">
+      <text class="reminder-title">⏰ 完成提醒</text>
+    </view>
+    <view class="reminder-content">
+      <text class="reminder-desc">洗衣完成时自动提醒群内成员</text>
+      <button 
+        class="reminder-btn {{reminderEnabled ? 'enabled' : 'disabled'}}" 
+        bindtap="toggleReminder"
+      >
+        {{reminderEnabled ? '✅ 已开启' : '❌ 未开启'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 快速功能 -->
+  <view class="quick-functions">
+    <view class="section-title">⚡ 快速功能</view>
+    
+    <!-- 分享功能说明 -->
+    <view class="share-guide">
+      <view class="guide-header">
+        <text class="guide-title">📤 分享功能使用指南</text>
+      </view>
+      <view class="guide-content">
+        <view class="guide-item">
+          <text class="guide-icon">1️⃣</text>
+          <text class="guide-text">确保网络连接正常（显示"在线模式"）</text>
+        </view>
+        <view class="guide-item">
+          <text class="guide-icon">2️⃣</text>
+          <text class="guide-text">点击"分享到微信群"按钮</text>
+        </view>
+        <view class="guide-item">
+          <text class="guide-icon">3️⃣</text>
+          <text class="guide-text">点击右上角"..."选择发送给朋友</text>
+        </view>
+        <view class="guide-item">
+          <text class="guide-icon">4️⃣</text>
+          <text class="guide-text">选择目标群聊，发送完成！</text>
+        </view>
+      </view>
+      
+      <!-- 网络连接说明 -->
+      <view wx:if="{{networkStatus === 'offline'}}" class="network-guide">
+        <view class="network-guide-header">
+          <text class="guide-icon">⚠️</text>
+          <text class="guide-title">网络连接问题解决方法</text>
+        </view>
+        <view class="guide-content">
+          <view class="guide-item">
+            <text class="guide-icon">✅</text>
+            <text class="guide-text">确保服务器正在运行（端口3000）</text>
+          </view>
+          <view class="guide-item">
+            <text class="guide-icon">✅</text>
+            <text class="guide-text">微信开发者工具 → 详情 → 本地设置</text>
+          </view>
+          <view class="guide-item">
+            <text class="guide-icon">✅</text>
+            <text class="guide-text">勾选"不校验合法域名"选项</text>
+          </view>
+          <view class="guide-item">
+            <text class="guide-icon">✅</text>
+            <text class="guide-text">重新编译项目并点击"重试"按钮</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="quick-btn-grid">
+      <button class="quick-btn" bindtap="goToHistory">
+        <text class="quick-btn-icon">📊</text>
+        <text class="quick-btn-text">使用历史</text>
+      </button>
+      <button class="quick-btn" bindtap="goToReserve">
+        <text class="quick-btn-icon">📅</text>
+        <text class="quick-btn-text">简单预约</text>
+      </button>
+      <button class="quick-btn" bindtap="showNotifyOptions">
+        <text class="quick-btn-icon">📢</text>
+        <text class="quick-btn-text">快速通知</text>
+      </button>
+      <button class="quick-btn" bindtap="showSettings">
+        <text class="quick-btn-icon">🛠️</text>
+        <text class="quick-btn-text">更多设置</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 预约列表 (简化显示) -->
+  <view wx:if="{{reservations.length > 0}}" class="simple-reservations">
+    <view class="section-title">📅 今日预约 ({{reservations.length}}个)</view>
+    <view class="reservation-preview">
+      <view 
+        wx:for="{{reservations}}" 
+        wx:for-index="idx"
+        wx:key="id" 
+        wx:if="{{idx < 2}}"
+        class="reservation-item-simple"
+      >
+        <text class="reservation-user">{{item.user_name}}</text>
+        <text class="reservation-time">{{formatTime(item.reserved_time)}}</text>
+      </view>
+      <text wx:if="{{reservations.length > 2}}" class="more-reservations">
+        还有{{reservations.length - 2}}个预约...
+      </text>
+    </view>
+  </view>
+</view>
+
+<!-- 通知群选项弹窗 -->
+<view wx:if="{{showNotifyModal}}" class="modal-overlay" bindtap="hideNotifyModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">📢 选择通知内容</text>
+      <button class="modal-close" bindtap="hideNotifyModal">✕</button>
+    </view>
+    <view class="modal-body">
+      <view class="modal-tips">
+        <text class="tips-text">💡 选择通知内容后，可以直接分享到微信群或复制消息</text>
+      </view>
+      
+      <!-- 群组成员选择器 (仅在群组通知模式下显示) -->
+      <view wx:if="{{currentNotifyMode === 'in-app' && currentGroup}}" class="member-selector-section">
+        <view class="selector-header">
+          <text class="selector-title">📋 选择通知对象</text>
+          <view class="select-actions">
+            <button class="select-all-btn" bindtap="selectAllMembers">全选</button>
+            <button class="select-none-btn" bindtap="selectNoneMembers">全不选</button>
+          </view>
+        </view>
+        <view class="members-grid">
+          <view 
+            wx:for="{{groupMembers}}" 
+            wx:key="userId" 
+            class="member-item {{selectedMembers.includes(item.userId) ? 'selected' : ''}}"
+            bindtap="toggleMemberSelection"
+            data-user-id="{{item.userId}}"
+          >
+            <text class="member-name">{{item.userName}}</text>
+            <text wx:if="{{item.userId === currentGroup.ownerId}}" class="owner-badge">群主</text>
+            <view class="selection-indicator">
+              {{selectedMembers.includes(item.userId) ? '✅' : '⚪'}}
+            </view>
+          </view>
+        </view>
+        <view class="selection-summary">
+          <text class="summary-text">已选择 {{selectedMembers.length}}/{{groupMembers.length}} 人</text>
+        </view>
+      </view>
+      
+      <!-- @人员设置 (仅在传统群消息模式下显示) -->
+      <view wx:if="{{currentNotifyMode === 'copy'}}" class="at-setting-section">
+        <view class="section-header">
+          <text class="section-title">🏷️ @人员设置</text>
+          <button class="manage-members-btn" bindtap="manageMembers">管理</button>
+        </view>
+        <view class="at-mode-selector">
+          <button 
+            class="at-mode-btn {{atMode === 'all' ? 'active' : ''}}" 
+            bindtap="setAtMode" 
+            data-mode="all"
+          >
+            @所有人
+          </button>
+          <button 
+            class="at-mode-btn {{atMode === 'specific' ? 'active' : ''}}" 
+            bindtap="setAtMode" 
+            data-mode="specific"
+          >
+            @指定人
+          </button>
+          <button 
+            class="at-mode-btn {{atMode === 'none' ? 'active' : ''}}" 
+            bindtap="setAtMode" 
+            data-mode="none"
+          >
+            不@人
+          </button>
+        </view>
+        <view wx:if="{{atMode === 'specific' && commonMembers.length > 0}}" class="common-members">
+          <text class="members-label">常用@：</text>
+          <view class="members-list">
+            <text wx:for="{{commonMembers}}" wx:key="*this" class="member-tag">{{item}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <button class="notify-option-btn" bindtap="notifyCurrentStatus">
+        📋 通知当前状态
+      </button>
+      <button wx:if="{{status.status === 'in_use'}}" class="notify-option-btn" bindtap="askWhenFinish">
+        ❓ 询问还需多久
+      </button>
+      <button class="notify-option-btn share-option-btn" bindtap="shareCurrentStatus" data-mode="share">
+        📤 分享到微信群
+      </button>
+      <button class="notify-option-btn" bindtap="customNotify">
+        ✏️ 自定义通知内容
+      </button>
     </view>
   </view>
 </view> 

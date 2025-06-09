@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 消息卡片 -->
+  <view class="message-card">
+    <view class="card-header">
+      <view class="app-info">
+        <image class="app-icon" src="../../images/icon.png" mode="aspectFit"></image>
+        <view class="app-details">
+          <text class="app-name">洗衣机助手</text>
+          <text class="app-desc">智能群通知</text>
+        </view>
+      </view>
+      <view class="time-stamp">
+        <text>{{formatTime(timestamp)}}</text>
+      </view>
+    </view>
+    
+    <view class="card-content">
+      <view class="message-content">
+        <text class="message-text">{{message}}</text>
+      </view>
+      
+      <!-- 如果是状态通知，显示状态信息 -->
+      <view wx:if="{{showStatus}}" class="status-info">
+        <view class="status-item">
+          <text class="status-label">当前状态：</text>
+          <text class="status-value {{status.status}}">{{getStatusText(status.status)}}</text>
+        </view>
+        <view wx:if="{{status.status === 'in_use'}}" class="status-item">
+          <text class="status-label">使用者：</text>
+          <text class="status-value">{{status.current_user_name}}</text>
+        </view>
+        <view wx:if="{{status.status === 'in_use'}}" class="status-item">
+          <text class="status-label">剩余时间：</text>
+          <text class="status-value">{{getRemainingTime(status.estimated_end_time)}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="card-actions">
+      <button class="action-btn primary" bindtap="openApp">
+        📱 打开小程序查看详情
+      </button>
+      <button class="action-btn secondary" bindtap="refreshStatus">
+        🔄 刷新状态
+      </button>
+      <button class="action-btn share-btn" bindtap="continueShare">
+        📤 继续分享
+      </button>
+      <button class="action-btn copy-btn" bindtap="copyMessage">
+        📋 复制消息
+      </button>
+    </view>
+  </view>
+  
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <view class="section-title">🚀 快速操作</view>
+    <view class="action-grid">
+      <button class="quick-action-btn" bindtap="checkStatus">
+        <text class="action-icon">📊</text>
+        <text class="action-text">查看状态</text>
+      </button>
+      <button class="quick-action-btn" bindtap="quickReserve">
+        <text class="action-icon">📅</text>
+        <text class="action-text">快速预约</text>
+      </button>
+      <button class="quick-action-btn" bindtap="viewHistory">
+        <text class="action-icon">📈</text>
+        <text class="action-text">使用历史</text>
+      </button>
+    </view>
+  </view>
+  
+  <!-- 提示信息 -->
+  <view class="tips">
+    <view class="tip-item">
+      <text class="tip-icon">💡</text>
+      <text class="tip-text">这是来自洗衣机助手的群通知消息</text>
+    </view>
+    <view class="tip-item">
+      <text class="tip-icon">📲</text>
+      <text class="tip-text">点击上方按钮可直接打开小程序操作</text>
+    </view>
+  </view>
+</view> 
